@@ -1,0 +1,13 @@
+Bening/
+Malign/
+*.mrxs
+pretrained/
+outputs/patches/
+outputs/features/
+outputs/figures/
+outputs/tables/
+outputs/results/*_attention.pt
+outputs/results/*_partial.pt
+venv/
+__pycache__/
+.pytest_cache/
