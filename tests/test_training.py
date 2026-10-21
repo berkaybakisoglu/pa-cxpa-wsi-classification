@@ -88,6 +88,21 @@ def test_training_is_deterministic(toy_project):
     assert first["prob_malignant"] == second["prob_malignant"]
 
 
+@pytest.mark.parametrize("aggregator", AGGREGATORS)
+def test_bag_weight_scales_only_clam_loss(toy_project, aggregator):
+    cfg, _ = toy_project
+    patients = [("B0", 0), ("B1", 0), ("B2", 0), ("M0", 1), ("M1", 1)]
+
+    def run(bag_weight):
+        cfg["model"]["bag_weight"] = bag_weight
+        train.set_seed(0)
+        return train.train_one_fold("toy", aggregator, "none", cfg, "cpu", "B0", 0,
+                                    [p for p, _ in patients[1:]], [l for _, l in patients[1:]], 0)
+
+    changed = run(0.7)["train_curve"] != run(1.0)["train_curve"]
+    assert changed == (aggregator == "clam_sb")
+
+
 def test_run_lopocv_resumes_from_partial(toy_project):
     cfg, _ = toy_project
     patients = [("B0", 0), ("B1", 0), ("M0", 1)]

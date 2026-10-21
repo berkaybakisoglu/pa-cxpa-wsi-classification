@@ -23,7 +23,7 @@ def toy_project(tmp_path):
                  "output_dir": str(tmp_path / "outputs"), "pretrained_dir": "pretrained"},
         "feature_extraction": {"extractors": ["toy"]},
         "model": {"hidden_dim": 8, "attention_dim": 4, "dropout": 0.0, "k_sample": 2,
-                  "instance_loss_weight": 0.3},
+                  "bag_weight": 0.7, "instance_loss_weight": 0.3},
         "training": {"lr": 1e-2, "weight_decay": 0.0, "epochs": 2},
         "imbalance": {"strategies": ["none", "oversample", "smote"], "smote_k_neighbors": 3},
         "evaluation": {"n_bootstrap": 50, "confidence_level": 0.95},

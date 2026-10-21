@@ -102,6 +102,7 @@ def train_one_fold(extractor_name, aggregator, strategy, cfg, device,
     model = build_aggregator(aggregator, train_features[0].shape[1], cfg["model"]).to(device)
     optimizer = Adam(model.parameters(), lr=train_cfg["lr"], weight_decay=train_cfg["weight_decay"])
     criterion = nn.CrossEntropyLoss()
+    bag_weight = cfg["model"]["bag_weight"] if aggregator == "clam_sb" else 1.0
 
     train_curve = []
     for epoch in range(1, train_cfg["epochs"] + 1):
@@ -114,7 +115,7 @@ def train_one_fold(extractor_name, aggregator, strategy, cfg, device,
             optimizer.zero_grad()
             # SMOTE bags are a single synthetic vector, so there are no patches to rank for the instance loss.
             results = model(train_features[idx].to(device), label=None if is_synthetic[idx] else label)
-            loss = criterion(results["logits"], torch.tensor([label], dtype=torch.long, device=device))
+            loss = bag_weight * criterion(results["logits"], torch.tensor([label], dtype=torch.long, device=device))
             loss = loss + results["instance_loss"]
             loss.backward()
             optimizer.step()

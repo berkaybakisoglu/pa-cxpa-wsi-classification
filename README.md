@@ -93,9 +93,9 @@ Every stage skips work whose output already exists (patch coordinates, feature f
 ## Implementation notes
 
 - **CLAM-SB** is a re-implementation of the single-branch model of Lu et al. (2021) without the
-  multi-class subtyping branch. The instance loss is cross-entropy (the original code also offers a
-  smooth top-1 SVM loss), and the total loss is `bag CE + 0.3 × instance loss` (the original weights
-  them 0.7/0.3).
+  multi-class subtyping branch. As in the original, the total loss is
+  `0.7 × bag CE + 0.3 × instance CE` (the original code also offers a smooth top-1 SVM instance
+  loss; its default, cross-entropy, is used).
   `k = 8` top- and bottom-attended patches are used; for bags with fewer than 16 patches the two
   sets overlap.
 - **Imbalance strategies.** `oversample` repeats minority bags until the classes are balanced (the

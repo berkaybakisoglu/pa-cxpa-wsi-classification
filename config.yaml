@@ -39,6 +39,7 @@ model:
   attention_dim: 256
   dropout: 0.25
   k_sample: 8                # CLAM-SB: top-k / bottom-k patches for the instance loss
+  bag_weight: 0.7            # CLAM-SB loss: 0.7 * bag CE + 0.3 * instance CE, as in the original
   instance_loss_weight: 0.3  # CLAM-SB
 
 # --- Training ---
